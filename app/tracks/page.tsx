@@ -1,0 +1,67 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { Navigation } from "@/components/navigation";
+import { Footer } from "@/components/footer";
+import { ProgramsHero } from "@/components/tracks/tracks-hero";
+import ProgramCategories from "@/components/tracks/track-categories";
+import { HexGymBackground } from "@/components/HexGymBackground";
+
+export default function ProgramsPage() {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const move = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener("mousemove", move);
+    return () => window.removeEventListener("mousemove", move);
+  }, []);
+
+  return (
+    <div className="relative w-full min-h-screen overflow-hidden">
+
+      {/* Background Image */}
+      <div className="fixed inset-0 -z-30">
+        <img
+          src="/view-gym-room-training-sports.jpg"
+          className="w-full h-full object-cover"
+          alt="background"
+        />
+      </div>
+
+      {/* Dark Overlay */}
+      <div className="fixed inset-0 -z-20 bg-black/0" />
+
+      {/* Mouse Spotlight */}
+      <div
+        className="fixed inset-0 pointer-events-none -z-10 transition-all duration-300"
+        style={{
+          background: `radial-gradient(
+            circle 350px at ${mousePos.x}px ${mousePos.y}px,
+            rgba(0,0,0,0.25) 0%,
+            rgba(0,0,0,0.75) 70%
+          )`,
+        }}
+      />
+
+      <Navigation />
+
+      <main className="pt-16 relative z-10">
+        <ProgramsHero />
+
+        {/* Program Categories Section */}
+        <section className="relative overflow-hidden py-12">
+          <HexGymBackground />
+
+          <div className="relative z-10">
+            <ProgramCategories />
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+    </div>
+  );
+}
